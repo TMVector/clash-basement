@@ -1,0 +1,15 @@
+[options]
+mode bmc
+depth 10
+expect fail
+
+[engines]
+smtbmc boolector
+# abc bmc3
+
+[script]
+read -formal memory.sv
+prep -top testbench
+
+[files]
+memory.sv

@@ -1,2 +1,3 @@
 # clash-basement
-Experiments with Clash
+
+Experiments with [Clash](https://clash-lang.org/)
