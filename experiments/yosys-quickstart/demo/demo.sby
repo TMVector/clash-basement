@@ -1,3 +1,7 @@
+[tasks]
+clash
+sv
+
 [options]
 mode bmc
 depth 100
@@ -6,8 +10,11 @@ depth 100
 smtbmc
 
 [script]
-read -formal demo.sv
-prep -top demo
+sv: read -formal demo.sv
+sv: prep -top demo
+clash: read -formal topEntity.v
+clash: prep -top topEntity
 
 [files]
-demo.sv
+sv: demo.sv
+clash: verilog/Counter/topEntity.v

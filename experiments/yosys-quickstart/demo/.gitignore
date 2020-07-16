@@ -1,1 +1,8 @@
 /demo/
+/demo_sv/
+/demo_clash/
+*.hi
+*.dyn_hi
+*.o
+*.dyn_o
+/verilog/

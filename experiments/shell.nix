@@ -1,7 +1,10 @@
+# Push to cachix with
+#  nix-store -qR --include-outputs $(nix-instantiate shell.nix) | cachix push tmvector
+
 let
   nixpkgs = import ../nix/nixpkgs.nix {};
 
-  haskellEnv = nixpkgs.haskell.packages.ghc865.ghcWithPackages (hs-pkgs: with hs-pkgs; [
+  haskellEnv = nixpkgs.haskellPackages.ghcWithPackages (hs-pkgs: with hs-pkgs; [
     cabal-install
 
     clash-prelude

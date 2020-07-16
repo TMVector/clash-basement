@@ -12,8 +12,9 @@ let
       clash-src = nixpkgsSelf.fetchFromGitHub {
         owner = "clash-lang";
         repo = "clash-compiler";
-        rev = "b17a60b0dc2cf51a6b96276c9c0bbfe4e11401c6";
-        sha256 = "091ddfvxdq1whbaplmy0n1kshmcv7fbjxpl2zaal3b0nn0jp85q6";
+        # From mp
+        rev = "da937e2da2cf5a0a33a8d00c1fcd9d7ac5cfc39a";
+        sha256 = "1njbydnwvbzw25lzs50sj1j5vj7lp3fx4zf7mb3is3fbm7y8yk3v";
       };
       clash-niv-sources = import "${clash-src}/nix/sources.nix";
     in {
