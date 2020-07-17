@@ -16,27 +16,16 @@ import qualified Clash.Explicit.Verification as Verif
 import           Clash.Verification.DSL
 
 
--- We would like to generate 'assume'/'restrict'/'assert' verilog statements
--- from within Clash.
--- Also useful to do this in initial blocks?
-
 topEntity clk = withClockResetEnable @System clk rst enableGen $
-  svaAssertion
-  -- . preludeAssertion -- symbiyosys doesn't like $display
-  $ c
+  withAssertions c
   where
     rst = resetGen
     c = counter
 
-    svaAssertion =
+    withAssertions =
       Verif.hideAssertion
-      . Verif.check clk rst "svaAssert" Verif.SVA
+      . Verif.check clk rst "upperBound" Verif.SVIA
       . Verif.assert
-      . Verif.always
-      $ c .<. pure 32
-
-    preludeAssertion =
-      (\p -> C.assert "preludeAssert" p (pure True))
       $ c .<. pure 32
 
 -- | Counter implementation copied from a Yosys quickstart example.

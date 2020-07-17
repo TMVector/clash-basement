@@ -13,8 +13,10 @@ let
         owner = "clash-lang";
         repo = "clash-compiler";
         # From mp
-        rev = "da937e2da2cf5a0a33a8d00c1fcd9d7ac5cfc39a";
-        sha256 = "1njbydnwvbzw25lzs50sj1j5vj7lp3fx4zf7mb3is3fbm7y8yk3v";
+        # rev = "da937e2da2cf5a0a33a8d00c1fcd9d7ac5cfc39a";
+        # sha256 = "1njbydnwvbzw25lzs50sj1j5vj7lp3fx4zf7mb3is3fbm7y8yk3v";
+        rev = "780db74e0a7245d2c76bbb4b8f83b70fc6f39ec9";
+        sha256 = "1ph0c307g4z2yw9zh5wxvls9rv696fb0psvayx1p0f1ganygndfh";
       };
       clash-niv-sources = import "${clash-src}/nix/sources.nix";
     in {

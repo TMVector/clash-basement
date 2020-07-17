@@ -12,9 +12,9 @@ smtbmc
 [script]
 sv: read -formal demo.sv
 sv: prep -top demo
-clash: read -formal topEntity.v
+clash: read -formal topEntity.sv
 clash: prep -top topEntity
 
 [files]
 sv: demo.sv
-clash: verilog/Counter/topEntity.v
+clash: clash-out/systemverilog/Counter/topEntity.sv
