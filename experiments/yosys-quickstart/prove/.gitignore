@@ -1,0 +1,7 @@
+/prove_sv/
+/prove_clash/
+/clash-out/
+*.hi
+*.dyn_hi
+*.o
+*.dyn_o
