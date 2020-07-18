@@ -1,7 +1,6 @@
 {-# LANGUAGE DataKinds         #-}
 {-# LANGUAGE DeriveAnyClass    #-}
 {-# LANGUAGE DeriveGeneric     #-}
-{-# LANGUAGE GADTs             #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
@@ -23,34 +22,32 @@ import qualified Clash.Explicit.Verification as Verif
 import           Clash.Verification.DSL
 
 
-topEntity :: Clock System -> Reset System -> Signal System (Unsigned 8) -> Signal System (Unsigned 8)
-topEntity clk rst din = withClockResetEnable @System clk rst enableGen $ assertions demo din
+topEntity clk rst = assertions clk rst (withClockResetEnable @System clk rst enableGen demo)
 
 assertions
-  :: HiddenClockResetEnable dom
-  => (Signal dom (Unsigned 8) -> Signal dom (Unsigned 8))
+  :: KnownDomain dom
+  => Clock dom
+  -> Reset dom
+  -> (Signal dom (Unsigned 8) -> Signal dom (Unsigned 8))
   -> Signal dom (Unsigned 8)
   -> Signal dom (Unsigned 8)
-assertions f inp = withAssertions out
+assertions clk rst f inp = withAssertions out
   where
     out = f inp
 
-    -- withAssertions :: Signal System a -> Signal System a
     withAssertions =
-      Verif.checkI hasClock hasReset "p0" Verif.SVIA assumeResetOnInit
-      . Verif.checkI hasClock hasReset "p1" Verif.SVIA assertTwoLsbAlwaysLow
+      Verif.checkI clk rst "p0" Verif.SVIA (Verif.assume resetAssertedOnInit)
+      . Verif.checkI clk rst "p1" Verif.SVIA (Verif.assert twoLsbAlwaysLow)
 
-    assertTwoLsbAlwaysLow = Verif.assert . whenOutOfReset $ out <&> \v ->
-       (truncateB v :: Unsigned 2) == 0
+    twoLsbAlwaysLow = whenOutOfReset rst $ out <&> \v ->
+      (truncateB v :: Unsigned 2) == 0
+
+    resetAssertedOnInit = withClockResetEnable clk rst enableGen $
+      register False (pure True) .||. unsafeFromReset hasReset
 
 -- | Only check the given property when the reset isn't asserted.
-whenOutOfReset :: (HiddenReset dom, AssertionValue dom a) => a -> Assertion dom
-whenOutOfReset a = unsafeToLowPolarity hasReset ||| a
-
--- | Assume reset is asserted on the first cycle.
-assumeResetOnInit :: HiddenClockResetEnable dom => Property dom
-assumeResetOnInit = Verif.assume $
-      register False (pure True) .||. unsafeFromReset hasReset
+whenOutOfReset :: (KnownDomain dom, AssertionValue dom a) => Reset dom -> a -> Assertion dom
+whenOutOfReset rst a = unsafeToLowPolarity rst ||| a
 
 data DemoState = DemoState
     { buffer :: Unsigned 8

@@ -2,7 +2,7 @@
   shellHook = ''
     ${old.shellHook or ""}
     function build-clash() {
-      clash --systemverilog -outputdir clash-out Demo.hs "$@"
+      clash --verilog -outputdir clash-out Demo.hs "$@"
     }
     function run-formal() {
       sby -f prove.sby "$@"

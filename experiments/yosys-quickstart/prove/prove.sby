@@ -11,9 +11,9 @@ smtbmc
 [script]
 sv: read -formal prove.sv
 sv: prep -top testbench
-clash: read -formal topEntity.sv
+clash: read -formal topEntity.v
 clash: prep -top topEntity
 
 [files]
 sv: prove.sv
-clash: clash-out/systemverilog/Demo/topEntity.sv
+clash: clash-out/verilog/Demo/topEntity.v
